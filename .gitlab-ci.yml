@@ -1,0 +1,36 @@
+stages:
+  - build
+  - automated test
+  - production
+
+bash:
+  stage: build
+  image: ubuntu
+  script:
+    - echo "#!/usr/bin/env bash" > helloWorld.sh
+    - echo 'echo "hello world!"' >> helloWorld.sh
+  artifacts:
+    paths:
+      - helloWorld.sh
+      
+cd:
+  stage: automated test
+  image: ubuntu
+  tags:
+  - test
+  script:
+    - chmod +x helloWorld.sh
+    - ./helloWorld.sh
+  dependencies:
+    - bash
+      
+prod:
+  stage: production
+  image: ubuntu
+  tags:
+  - production
+  script:
+    - chmod +x helloWorld.sh
+    - ./helloWorld.sh
+  dependencies:
+    - bash
